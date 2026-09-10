@@ -10,3 +10,8 @@ Our target variable is `Churn`, which has two classes: `Yes` and `No`.
 - We converted `TotalCharges` from string to numeric.
 - We found 11 missing values and removed those rows.
 - Finally, after cleaning, we have 7,032 customers.
+## Feature Selection and Data Splitting
+- We separated the features (X) from the target (y).
+- We removed `customerID` because it is only an identifier.
+- We split the data into 80% training and 20% testing.
+- We used stratified splitting to keep the same Churn distribution in both sets
