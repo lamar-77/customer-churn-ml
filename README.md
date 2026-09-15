@@ -15,3 +15,14 @@ Our target variable is `Churn`, which has two classes: `Yes` and `No`.
 - We removed `customerID` because it is only an identifier.
 - We split the data into 80% training and 20% testing.
 - We used stratified splitting to keep the same Churn distribution in both sets
+### Data Preprocessing
+
+- Split the dataset into training and testing sets (80/20).
+- Used stratified splitting to keep the churn distribution similar in both sets.
+- Identified numerical and categorical features.
+- Applied One-Hot Encoding to categorical features.
+- Fitted the encoder only on the training data to avoid data leakage.
+- Used the same encoder to transform the test data.
+- Combined numerical and encoded features.
+- Final training data shape: 5625 × 45.
+- Final test data shape: 1407 × 45.
