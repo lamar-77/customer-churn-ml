@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ChurnSense | Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-body">
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <a class="brand" href="/dashboard">
+        <span class="brand-mark" aria-hidden="true">
+          <span class="brand-dot dot-one"></span>
+          <span class="brand-dot dot-two"></span>
+          <span class="brand-dot dot-three"></span>
+        </span>
+        <span class="brand-name">ChurnSense</span>
+      </a>
+
+      <nav class="sidebar-nav" aria-label="Dashboard navigation">
+        <button class="sidebar-link active" data-panel="overview" data-permission="overview" type="button" data-dash-i18n="navOverview">Overview</button>
+        <button class="sidebar-link" data-panel="analyze" data-permission="analyze" type="button" data-dash-i18n="navAnalyze">Analyze</button>
+        <button class="sidebar-link" data-panel="customers" data-permission="records" type="button" data-dash-i18n="navCustomers">Customer records</button>
+        <button class="sidebar-link" data-panel="analytics" data-permission="analytics" type="button" data-dash-i18n="navAnalytics">Analytics</button>
+        <button class="sidebar-link" data-panel="profile" data-permission="profile" type="button" data-dash-i18n="navProfile">Profile</button>
+        <button class="sidebar-link" data-panel="settings" data-permission="settings" type="button" data-dash-i18n="navSettings">Settings</button>
+        <button class="sidebar-link" data-panel="admin" data-permission="users_manage" type="button" data-dash-i18n="navAdmin">Admin</button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <button id="dashboardLanguageToggle" class="language-toggle" type="button">عربي</button>
+        <button id="logoutButton" class="button button-secondary" type="button" data-dash-i18n="logout">Log out</button>
+      </div>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="dashboard-topbar">
+        <div class="dashboard-greeting">
+          <h1 id="greetingTitle">Good morning</h1>
+          <p data-dash-i18n="greetingText">Customer retention overview</p>
+        </div>
+
+        <div class="user-chip">
+          <span id="userAvatar" class="avatar">CS</span>
+          <div>
+            <strong id="userName">User</strong>
+            <small id="userRole">User</small>
+          </div>
+        </div>
+      </header>
+
+      <section id="panel-overview" class="dashboard-panel active">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow" data-dash-i18n="overviewEyebrow">OVERVIEW</span>
+            <h2 data-dash-i18n="overviewTitle">Your churn intelligence workspace</h2>
+            <p data-dash-i18n="overviewText">All numbers below come from predictions saved in your account.</p>
+          </div>
+          <button class="button button-primary" data-open-panel="analyze" type="button" data-dash-i18n="newAnalysis">New analysis</button>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card">
+            <span data-dash-i18n="totalAnalyzed">Customers analyzed</span>
+            <strong id="statTotal">0</strong>
+          </article>
+          <article class="stat-card">
+            <span data-dash-i18n="highRisk">Higher-risk customers</span>
+            <strong id="statHighRisk">0</strong>
+          </article>
+          <article class="stat-card">
+            <span data-dash-i18n="averageRisk">Average predicted risk</span>
+            <strong id="statAverage">0%</strong>
+          </article>
+        </div>
+
+        <div class="dashboard-grid">
+          <article class="dashboard-card" data-permission="records">
+            <div class="panel-heading">
+              <div>
+                <h3 data-dash-i18n="recentTitle">Recent analyses</h3>
+                <p data-dash-i18n="recentText">Your latest saved customer predictions.</p>
+              </div>
+            </div>
+            <div style="overflow-x:auto;">
+              <table class="records-table">
+                <thead>
+                  <tr>
+                    <th data-dash-i18n="customerRef">Customer</th>
+                    <th data-dash-i18n="risk">Risk</th>
+                    <th data-dash-i18n="status">Status</th>
+                    <th data-dash-i18n="date">Date</th>
+                  </tr>
+                </thead>
+                <tbody id="recentTableBody"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="dashboard-card">
+            <span class="eyebrow" data-dash-i18n="quickInsight">QUICK INSIGHT</span>
+            <h3 data-dash-i18n="quickTitle">Start with one customer</h3>
+            <p class="section-copy" data-dash-i18n="quickText">Run a customer analysis and keep the result available in your workspace.</p>
+            <button class="button button-primary" data-open-panel="analyze" type="button" data-dash-i18n="analyzeNow">Analyze now</button>
+          </article>
+        </div>
+      </section>
+
+      <section id="panel-analyze" class="dashboard-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow" data-dash-i18n="analysisEyebrow">CUSTOMER RISK ANALYSIS</span>
+            <h2 data-dash-i18n="analysisTitle">Analyze a customer</h2>
+            <p data-dash-i18n="analysisText">Enter the customer account, service, and billing information needed for risk analysis.</p>
+          </div>
+        </div>
+
+        <article class="dashboard-card">
+          <form id="dashboardPredictionForm">
+            <div class="dashboard-form-grid">
+              <label class="full-width">
+                <span data-dash-i18n="referenceLabel">Customer reference (optional)</span>
+                <input name="customer_reference" type="text" placeholder="CUST-1024">
+              </label>
+
+              <label><span>Gender</span><select name="gender" required><option value="Female">Female</option><option value="Male">Male</option></select></label>
+              <label><span>Senior citizen</span><select name="SeniorCitizen" required><option value="0">No</option><option value="1">Yes</option></select></label>
+              <label><span>Partner</span><select name="Partner" required><option value="Yes">Yes</option><option value="No">No</option></select></label>
+              <label><span>Dependents</span><select name="Dependents" required><option value="Yes">Yes</option><option value="No">No</option></select></label>
+              <label><span>Tenure (months)</span><input name="tenure" type="number" min="0" max="72" value="12" required></label>
+              <label><span>Phone service</span><select name="PhoneService" required><option value="Yes">Yes</option><option value="No">No</option></select></label>
+              <label><span>Multiple lines</span><select name="MultipleLines" required><option value="No">No</option><option value="Yes">Yes</option><option value="No phone service">No phone service</option></select></label>
+              <label><span>Internet service</span><select name="InternetService" required><option value="Fiber optic">Fiber optic</option><option value="DSL">DSL</option><option value="No">No</option></select></label>
+              <label><span>Online security</span><select name="OnlineSecurity" required><option value="No">No</option><option value="Yes">Yes</option><option value="No internet service">No internet service</option></select></label>
+              <label><span>Online backup</span><select name="OnlineBackup" required><option value="No">No</option><option value="Yes">Yes</option><option value="No internet service">No internet service</option></select></label>
+              <label><span>Device protection</span><select name="DeviceProtection" required><option value="No">No</option><option value="Yes">Yes</option><option value="No internet service">No internet service</option></select></label>
+              <label><span>Tech support</span><select name="TechSupport" required><option value="No">No</option><option value="Yes">Yes</option><option value="No internet service">No internet service</option></select></label>
+              <label><span>Streaming TV</span><select name="StreamingTV" required><option value="No">No</option><option value="Yes">Yes</option><option value="No internet service">No internet service</option></select></label>
+              <label><span>Streaming movies</span><select name="StreamingMovies" required><option value="No">No</option><option value="Yes">Yes</option><option value="No internet service">No internet service</option></select></label>
+              <label><span>Contract</span><select name="Contract" required><option value="Month-to-month">Month-to-month</option><option value="One year">One year</option><option value="Two year">Two year</option></select></label>
+              <label><span>Paperless billing</span><select name="PaperlessBilling" required><option value="Yes">Yes</option><option value="No">No</option></select></label>
+              <label><span>Payment method</span><select name="PaymentMethod" required><option value="Electronic check">Electronic check</option><option value="Mailed check">Mailed check</option><option value="Bank transfer (automatic)">Bank transfer (automatic)</option><option value="Credit card (automatic)">Credit card (automatic)</option></select></label>
+              <label><span>Monthly charges</span><input name="MonthlyCharges" type="number" min="0" step="0.01" value="85.5" required></label>
+              <label><span>Total charges</span><input name="TotalCharges" type="number" min="0" step="0.01" value="1026" required></label>
+            </div>
+
+            <div style="margin-top:20px;display:flex;justify-content:flex-end;">
+              <button class="button button-primary" type="submit" data-dash-i18n="analyzeButton">Analyze churn risk</button>
+            </div>
+          </form>
+
+          <div id="dashboardPredictionResult" class="dashboard-result" hidden></div>
+        </article>
+
+        <article id="simulatorCard" data-permission="simulator" class="dashboard-card" style="margin-top:18px;" hidden>
+          <span class="eyebrow" data-dash-i18n="simEyebrow">RISK SIMULATOR</span>
+          <h3 data-dash-i18n="simTitle">What if the customer profile changed?</h3>
+          <p class="section-copy" data-dash-i18n="simText">Compare a predictive scenario. This is not a causal estimate.</p>
+
+          <div class="simulator-grid">
+            <label>
+              <span data-dash-i18n="simContract">Contract scenario</span>
+              <select id="simContract">
+                <option value="Month-to-month">Month-to-month</option>
+                <option value="One year">One year</option>
+                <option value="Two year">Two year</option>
+              </select>
+            </label>
+            <label>
+              <span data-dash-i18n="simSupport">Tech support scenario</span>
+              <select id="simTechSupport">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+                <option value="No internet service">No internet service</option>
+              </select>
+            </label>
+          </div>
+
+          <div style="margin-top:16px;">
+            <button id="simulateButton" class="button button-secondary" type="button" data-dash-i18n="simulateButton">Compare scenario</button>
+          </div>
+
+          <div id="simulatorResult" class="simulator-result" hidden></div>
+        </article>
+      </section>
+
+      <section id="panel-customers" class="dashboard-panel" data-permission="records">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow" data-dash-i18n="recordsEyebrow">CUSTOMER RECORDS</span>
+            <h2 data-dash-i18n="recordsTitle">Prediction history</h2>
+            <p data-dash-i18n="recordsText">Only analyses created from your account appear here.</p>
+          </div>
+        </div>
+        <article class="dashboard-card" style="overflow-x:auto;">
+          <table class="records-table">
+            <thead><tr><th data-dash-i18n="customerRef">Customer</th><th data-dash-i18n="risk">Risk</th><th data-dash-i18n="status">Status</th><th data-dash-i18n="date">Date</th></tr></thead>
+            <tbody id="recordsTableBody"></tbody>
+          </table>
+        </article>
+      </section>
+
+      <section id="panel-analytics" class="dashboard-panel" data-permission="analytics">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow" data-dash-i18n="analyticsEyebrow">ANALYTICS</span>
+            <h2 data-dash-i18n="analyticsTitle">Risk distribution</h2>
+            <p data-dash-i18n="analyticsText">A simple summary calculated from your saved predictions.</p>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card"><span data-dash-i18n="totalAnalyzed">Customers analyzed</span><strong id="analyticsTotal">0</strong></article>
+          <article class="stat-card"><span data-dash-i18n="highRiskShare">Higher-risk share</span><strong id="analyticsHighShare">0%</strong></article>
+          <article class="stat-card"><span data-dash-i18n="averageRisk">Average predicted risk</span><strong id="analyticsAverage">0%</strong></article>
+        </div>
+        <article class="dashboard-card">
+          <h3 data-dash-i18n="analyticsNoteTitle">Why this stays simple</h3>
+          <p class="section-copy" data-dash-i18n="analyticsNoteText">ChurnSense avoids showing invented business metrics. These values are derived only from predictions saved in your local database.</p>
+        </article>
+      </section>
+
+      <section id="panel-profile" class="dashboard-panel">
+        <div class="panel-heading"><div><span class="eyebrow" data-dash-i18n="profileEyebrow">PROFILE</span><h2 data-dash-i18n="profileTitle">Account profile</h2></div></div>
+        <article class="dashboard-card">
+          <form id="profileForm" class="dashboard-form-grid">
+            <label><span data-dash-i18n="nameLabel">Name</span><input id="profileName" name="name" required></label>
+            <label><span data-dash-i18n="emailLabel">Email</span><input id="profileEmail" type="email" disabled></label>
+            <label><span data-dash-i18n="organizationLabel">Organization</span><input id="profileOrganization" name="organization"></label>
+            <label><span data-dash-i18n="jobTitleLabel">Job title</span><input id="profileJobTitle" name="job_title"></label>
+            <div class="full-width"><button class="button button-primary" type="submit" data-dash-i18n="saveProfile">Save profile</button></div>
+          </form>
+          <p id="profileMessage" class="auth-message"></p>
+        </article>
+      </section>
+
+      <section id="panel-settings" class="dashboard-panel">
+        <div class="panel-heading"><div><span class="eyebrow" data-dash-i18n="settingsEyebrow">SETTINGS</span><h2 data-dash-i18n="settingsTitle">Workspace preferences</h2></div></div>
+        <article class="dashboard-card">
+          <div class="settings-list">
+            <div class="settings-row"><div><strong data-dash-i18n="languageSetting">Language</strong><p class="section-copy" data-dash-i18n="languageSettingText">Choose the default dashboard language.</p></div><select id="settingLanguage"><option value="en">English</option><option value="ar">العربية</option></select></div>
+            <div class="settings-row"><div><strong data-dash-i18n="themeSetting">Theme</strong><p class="section-copy" data-dash-i18n="themeSettingText">Saved now for future dark-mode support.</p></div><select id="settingTheme"><option value="light">Light</option><option value="dark">Dark</option></select></div>
+          </div>
+          <div style="margin-top:18px;"><button id="saveSettingsButton" class="button button-primary" type="button" data-dash-i18n="saveSettings">Save settings</button></div>
+          <p id="settingsMessage" class="auth-message"></p>
+        </article>
+      </section>
+
+      <section id="panel-admin" class="dashboard-panel" data-permission="users_manage">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">ADMIN</span>
+            <h2 data-dash-i18n="adminTitle">Administration</h2>
+            <p data-dash-i18n="adminText">Manage user access and review workspace activity.</p>
+          </div>
+        </div>
+
+        <div class="stats-grid admin-stats-grid">
+          <article class="stat-card"><span data-dash-i18n="registeredUsers">Registered users</span><strong id="adminUsers">0</strong></article>
+          <article class="stat-card"><span data-dash-i18n="savedPredictions">Saved predictions</span><strong id="adminPredictions">0</strong></article>
+        </div>
+
+        <article class="dashboard-card">
+          <div class="panel-heading admin-table-heading">
+            <div>
+              <h3 data-dash-i18n="userManagementTitle">User management</h3>
+              <p data-dash-i18n="userManagementText">New accounts start as User. Admins can assign Analyst, Manager, or Admin access.</p>
+            </div>
+          </div>
+
+          <div class="admin-table-wrap">
+            <table class="records-table admin-users-table">
+              <thead>
+                <tr>
+                  <th data-dash-i18n="nameLabel">Name</th>
+                  <th data-dash-i18n="emailLabel">Email</th>
+                  <th data-dash-i18n="roleLabel">Role</th>
+                  <th data-dash-i18n="joinedLabel">Joined</th>
+                  <th data-dash-i18n="actionLabel">Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminUsersTableBody"></tbody>
+            </table>
+          </div>
+          <p id="adminMessage" class="auth-message"></p>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

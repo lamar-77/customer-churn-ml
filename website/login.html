@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ChurnSense | Sign in</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="auth-page">
+    <section class="auth-brand-panel">
+      <a class="brand" href="/">
+        <span class="brand-mark" aria-hidden="true">
+          <span class="brand-dot dot-one"></span>
+          <span class="brand-dot dot-two"></span>
+          <span class="brand-dot dot-three"></span>
+        </span>
+        <span class="brand-name">ChurnSense</span>
+      </a>
+
+      <div class="auth-hero">
+        <span class="eyebrow" data-auth-i18n="eyebrow">CUSTOMER RETENTION INTELLIGENCE</span>
+        <h1 data-auth-i18n="title">Turn churn signals into earlier action.</h1>
+        <p data-auth-i18n="text">Sign in to analyze customers, review saved risk assessments, and compare predictive scenarios.</p>
+      </div>
+
+      <p class="auth-note" data-auth-i18n="note">Secure account access • Passwords are stored as protected hashes.</p>
+    </section>
+
+    <section class="auth-form-panel">
+      <div class="auth-card">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:14px;">
+          <button id="authLanguageToggle" class="language-toggle" type="button">عربي</button>
+        </div>
+
+        <div class="auth-tabs">
+          <button class="auth-tab active" type="button" data-auth-tab="login" data-auth-i18n="signInTab">Sign in</button>
+          <button class="auth-tab" type="button" data-auth-tab="register" data-auth-i18n="createTab">Create account</button>
+        </div>
+
+        <form id="loginForm" class="auth-form active">
+          <h2 data-auth-i18n="welcome">Welcome back</h2>
+          <p class="section-copy" data-auth-i18n="welcomeText">Use your ChurnSense account to continue.</p>
+
+          <label class="auth-field">
+            <span data-auth-i18n="email">Email</span>
+            <input name="email" type="email" autocomplete="email" required>
+          </label>
+
+          <label class="auth-field">
+            <span data-auth-i18n="password">Password</span>
+            <input name="password" type="password" autocomplete="current-password" required>
+          </label>
+
+          <button class="button button-primary" style="width:100%;" type="submit" data-auth-i18n="signInButton">Sign in</button>
+          <p id="loginMessage" class="auth-message"></p>
+        </form>
+
+        <form id="registerForm" class="auth-form">
+          <h2 data-auth-i18n="createTitle">Create your workspace</h2>
+          <p class="section-copy" data-auth-i18n="createText">Create your ChurnSense account to start analyzing customer risk.</p>
+
+          <label class="auth-field">
+            <span data-auth-i18n="name">Name</span>
+            <input name="name" type="text" autocomplete="name" required>
+          </label>
+
+          <label class="auth-field">
+            <span data-auth-i18n="email">Email</span>
+            <input name="email" type="email" autocomplete="email" required>
+          </label>
+
+          <label class="auth-field">
+            <span data-auth-i18n="passwordRule">Password (8+ characters)</span>
+            <input name="password" type="password" minlength="8" autocomplete="new-password" required>
+          </label>
+
+          <button class="button button-primary" style="width:100%;" type="submit" data-auth-i18n="createButton">Create account</button>
+          <p id="registerMessage" class="auth-message"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="login.js"></script>
+</body>
+</html>

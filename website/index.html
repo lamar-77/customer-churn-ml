@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <!-- Use UTF-8 so English and Arabic text display correctly. -->
+  <meta charset="utf-8">
+
+  <!-- Make the layout responsive on phones and tablets. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Short description used by browsers and search engines. -->
+  <meta name="description" content="ChurnSense helps teams assess customer churn risk and support earlier retention decisions.">
+
+  <!-- Browser tab title. -->
+  <title>ChurnSense | Customer Retention Intelligence</title>
+
+  <!-- Load the website stylesheet. -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Sticky navigation bar. -->
+  <header class="site-header">
+    <div class="nav page-width">
+      <!-- Brand area. -->
+      <a class="brand" href="#top" aria-label="ChurnSense home">
+        <!-- Simple abstract logo made with CSS only. -->
+        <span class="brand-mark" aria-hidden="true">
+          <span class="brand-dot dot-one"></span>
+          <span class="brand-dot dot-two"></span>
+          <span class="brand-dot dot-three"></span>
+        </span>
+        <span class="brand-name">ChurnSense</span>
+      </a>
+
+      <!-- Desktop navigation links. -->
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#analyze" data-i18n="navAnalyze">Analyze</a>
+        <a href="#how" data-i18n="navHow">How it works</a>
+        <a href="#performance" data-i18n="navPerformance">Performance</a>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- Open the account area. -->
+        <a class="nav-signin" href="/login" data-i18n="navSignIn">Sign in</a>
+
+        <!-- Switch between English and Arabic. -->
+        <button id="languageToggle" class="language-toggle" type="button" aria-label="Switch language">
+          عربي
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero section explains the product value, not the technical implementation. -->
+    <section class="hero page-width">
+      <div class="hero-copy">
+        <span class="eyebrow" data-i18n="heroEyebrow">CUSTOMER RETENTION INTELLIGENCE</span>
+
+        <h1 data-i18n="heroTitle">Understand churn risk before customers leave.</h1>
+
+        <p class="hero-text" data-i18n="heroText">
+          ChurnSense helps teams identify higher-risk customers earlier and support more informed retention decisions.
+        </p>
+
+        <div class="hero-actions">
+          <a class="button button-primary" href="#analyze" data-i18n="heroPrimary">Analyze a customer</a>
+          <a class="button button-secondary" href="#how" data-i18n="heroSecondary">See how it works</a>
+        </div>
+      </div>
+
+      <!-- Product-style visual instead of exposing model internals. -->
+      <aside class="insight-card" aria-label="ChurnSense product overview">
+        <div class="insight-topline">
+          <span class="mini-label" data-i18n="insightLabel">RISK INTELLIGENCE</span>
+          <span class="live-pill" data-i18n="insightReady">Ready</span>
+        </div>
+
+        <div class="signal-orbit" aria-hidden="true">
+          <div class="orbit-ring orbit-ring-one"></div>
+          <div class="orbit-ring orbit-ring-two"></div>
+          <div class="orbit-center">CS</div>
+          <span class="orbit-node node-one"></span>
+          <span class="orbit-node node-two"></span>
+          <span class="orbit-node node-three"></span>
+        </div>
+
+        <div class="insight-list">
+          <div>
+            <span class="insight-index">01</span>
+            <div>
+              <strong data-i18n="insightOneTitle">Identify risk</strong>
+              <small data-i18n="insightOneText">Assess churn likelihood from customer information.</small>
+            </div>
+          </div>
+
+          <div>
+            <span class="insight-index">02</span>
+            <div>
+              <strong data-i18n="insightTwoTitle">Support action</strong>
+              <small data-i18n="insightTwoText">Surface higher-risk customers earlier.</small>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- Main prediction experience. -->
+    <section id="analyze" class="section page-width">
+      <div class="section-heading compact-heading">
+        <div>
+          <span class="eyebrow" data-i18n="analysisEyebrow">CUSTOMER RISK ANALYSIS</span>
+          <h2 data-i18n="analysisTitle">Assess a customer in three quick steps.</h2>
+          <p class="section-copy" data-i18n="analysisText">
+            Enter account, service, and billing information to estimate churn risk.
+          </p>
+        </div>
+      </div>
+
+      <!-- Two-column layout: step form on the left, compact result on the right. -->
+      <div class="analysis-layout">
+        <form id="predictionForm" class="form-shell" novalidate>
+          <!-- Progress header for the three-step form. -->
+          <div class="stepper" aria-label="Prediction form progress">
+            <button class="step-tab active" type="button" data-step-target="1">
+              <span>1</span>
+              <b data-i18n="stepCustomer">Customer</b>
+            </button>
+
+            <div class="step-line"></div>
+
+            <button class="step-tab" type="button" data-step-target="2">
+              <span>2</span>
+              <b data-i18n="stepServices">Services</b>
+            </button>
+
+            <div class="step-line"></div>
+
+            <button class="step-tab" type="button" data-step-target="3">
+              <span>3</span>
+              <b data-i18n="stepBilling">Billing</b>
+            </button>
+          </div>
+
+          <!-- STEP 1: Customer profile. -->
+          <section class="form-step active" data-step="1">
+            <div class="form-step-heading">
+              <span class="step-kicker" data-i18n="stepOneKicker">STEP 01</span>
+              <h3 data-i18n="customerTitle">Customer information</h3>
+              <p data-i18n="customerText">Basic account and relationship details.</p>
+            </div>
+
+            <div class="form-grid">
+              <label>
+                <span data-i18n="genderLabel">Gender</span>
+                <select name="gender" required>
+                  <option value="" data-i18n="selectOption">Select</option>
+                  <option value="Female" data-i18n="femaleOption">Female</option>
+                  <option value="Male" data-i18n="maleOption">Male</option>
+                </select>
+              </label>
+
+              <label>
+                <span data-i18n="seniorLabel">Senior citizen</span>
+                <select name="SeniorCitizen" required>
+                  <option value="" data-i18n="selectOption">Select</option>
+                  <option value="0" data-i18n="noOption">No</option>
+                  <option value="1" data-i18n="yesOption">Yes</option>
+                </select>
+              </label>
+
+              <label>
+                <span data-i18n="partnerLabel">Partner</span>
+                <select name="Partner" required>
+                  <option value="" data-i18n="selectOption">Select</option>
+                  <option value="Yes" data-i18n="yesOption">Yes</option>
+                  <option value="No" data-i18n="noOption">No</option>
+                </select>
+              </label>
+
+              <label>
+                <span data-i18n="dependentsLabel">Dependents</span>
+                <select name="Dependents" required>
+                  <option value="" data-i18n="selectOption">Select</option>
+                  <option value="Yes" data-i18n="yesOption">Yes</option>
+                  <option value="No" data-i18n="noOption">No</option>
+                </select>
+              </label>
+
+              <label class="field-wide">
+                <span data-i18n="tenureLabel">Tenure (months)</span>
+                <input name="tenure" type="number" min="0" max="72" step="1" placeholder="12" required>
+              </label>
+            </div>
+
+            <div class="form-actions align-end">
+              <button class="button button-primary next-step" type="button" data-next="2" data-i18n="continueButton">Continue</button>
+            </div>
+          </section>
+
+          <!-- STEP 2: Customer services. -->
+          <section class="form-step" data-step="2">
+            <div class="form-step-heading">
+              <span class="step-kicker" data-i18n="stepTwoKicker">STEP 02</span>
+              <h3 data-i18n="servicesTitle">Services</h3>
+              <p data-i18n="servicesText">Phone, internet, and add-on service details.</p>
+            </div>
+
+            <div class="form-grid">
+              <label>
+                <span data-i18n="phoneLabel">Phone service</span>
+                <select name="PhoneService" required>
+                  <option value="" data-i18n="selectOption">Select</option>
+                  <option value="Yes" data-i18n="yesOption">Yes</option>
+                  <option value="No" data-i18n="noOption">No</option>
+                </select>
+              </label>
+
+              <label>
+                <span data-i18n="linesLabel">Multiple lines</span>
+                <select name="MultipleLines" required>
+                  <option value="" data-i18n="selectOption">Select</option>
+                  <option value="Yes" data-i18n="yesOption">Yes</option>
+                  <option value="No" data-i18n="noOption">No</option>
+                  <option value="No phone service" data-i18n="noPhoneOption">No phone service</option>
+                </select>
+              </label>
+
+              <label>
+                <span data-i18n="internetLabel">Internet service</span>
+                <select name="InternetService" required>
+                  <option value="" data-i18n="selectOption">Select</option>
+                  <option value="DSL">DSL</option>
+                  <option value="Fiber optic" data-i18n="fiberOption">Fiber optic</option>
+                  <option value="No" data-i18n="noOption">No</option>
+                </select>
+              </label>
+
+              <label>
+                <span data-i18n="securityLabel">Online security</span>
+                <select name="OnlineSecurity" required>
+                  <option value="" data-i18n="selectOption">Select</option>
+                  <option value="Yes" data-i18n="yesOption">Yes</option>
+                  <option value="No" data-i18n="noOption">No</option>
+                  <option value="No internet service" data-i18n="noInternetOption">No internet service</option>
+                </select>
+              </label>
+
+              <label>
+                <span data-i18n="backupLabel">Online backup</span>
+                <select name="OnlineBackup" required>
+                  <option value="" data-i18n="selectOption">Select</option>
+                  <option value="Yes" data-i18n="yesOption">Yes</option>
+                  <option value="No" data-i18n="noOption">No</option>
+                  <option value="No internet service" data-i18n="noInternetOption">No internet service</option>
+                </select>
+              </label>
+
+              <label>
+                <span data-i18n="protectionLabel">Device protection</span>
+                <select name="DeviceProtection" required>
+                  <option value="" data-i18n="selectOption">Select</option>
+                  <option value="Yes" data-i18n="yesOption">Yes</option>
+                  <option value="No" data-i18n="noOption">No</option>
+                  <option value="No internet service" data-i18n="noInternetOption">No internet service</option>
+                </select>
+              </label>
+
+              <label>
+                <span data-i18n="supportLabel">Tech support</span>
+                <select name="TechSupport" required>
+                  <option value="" data-i18n="selectOption">Select</option>
+                  <option value="Yes" data-i18n="yesOption">Yes</option>
+                  <option value="No" data-i18n="noOption">No</option>
+                  <option value="No internet service" data-i18n="noInternetOption">No internet service</option>
+                </select>
+              </label>
+
+              <label>
+                <span data-i18n="tvLabel">Streaming TV</span>
+                <select name="StreamingTV" required>
+                  <option value="" data-i18n="selectOption">Select</option>
+                  <option value="Yes" data-i18n="yesOption">Yes</option>
+                  <option value="No" data-i18n="noOption">No</option>
+                  <option value="No internet service" data-i18n="noInternetOption">No internet service</option>
+                </select>
+              </label>
+
+              <label class="field-wide">
+                <span data-i18n="moviesLabel">Streaming movies</span>
+                <select name="StreamingMovies" required>
+                  <option value="" data-i18n="selectOption">Select</option>
+                  <option value="Yes" data-i18n="yesOption">Yes</option>
+                  <option value="No" data-i18n="noOption">No</option>
+                  <option value="No internet service" data-i18n="noInternetOption">No internet service</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="form-actions split-actions">
+              <button class="button button-ghost previous-step" type="button" data-previous="1" data-i18n="backButton">Back</button>
+              <button class="button button-primary next-step" type="button" data-next="3" data-i18n="continueButton">Continue</button>
+            </div>
+          </section>
+
+          <!-- STEP 3: Billing and contract details. -->
+          <section class="form-step" data-step="3">
+            <div class="form-step-heading">
+              <span class="step-kicker" data-i18n="stepThreeKicker">STEP 03</span>
+              <h3 data-i18n="billingTitle">Contract & billing</h3>
+              <p data-i18n="billingText">Payment and account charge information.</p>
+            </div>
+
+            <div class="form-grid">
+              <label>
+                <span data-i18n="contractLabel">Contract</span>
+                <select name="Contract" required>
+                  <option value="" data-i18n="selectOption">Select</option>
+                  <option value="Month-to-month" data-i18n="monthlyOption">Month-to-month</option>
+                  <option value="One year" data-i18n="oneYearOption">One year</option>
+                  <option value="Two year" data-i18n="twoYearOption">Two year</option>
+                </select>
+              </label>
+
+              <label>
+                <span data-i18n="paperlessLabel">Paperless billing</span>
+                <select name="PaperlessBilling" required>
+                  <option value="" data-i18n="selectOption">Select</option>
+                  <option value="Yes" data-i18n="yesOption">Yes</option>
+                  <option value="No" data-i18n="noOption">No</option>
+                </select>
+              </label>
+
+              <label>
+                <span data-i18n="paymentLabel">Payment method</span>
+                <select name="PaymentMethod" required>
+                  <option value="" data-i18n="selectOption">Select</option>
+                  <option value="Electronic check" data-i18n="electronicCheckOption">Electronic check</option>
+                  <option value="Mailed check" data-i18n="mailedCheckOption">Mailed check</option>
+                  <option value="Bank transfer (automatic)" data-i18n="bankTransferOption">Bank transfer (automatic)</option>
+                  <option value="Credit card (automatic)" data-i18n="creditCardOption">Credit card (automatic)</option>
+                </select>
+              </label>
+
+              <label>
+                <span data-i18n="monthlyChargesLabel">Monthly charges</span>
+                <input name="MonthlyCharges" type="number" min="0" step="0.01" placeholder="75.50" required>
+              </label>
+
+              <label class="field-wide">
+                <span data-i18n="totalChargesLabel">Total charges</span>
+                <input name="TotalCharges" type="number" min="0" step="0.01" placeholder="906.00" required>
+              </label>
+            </div>
+
+            <div class="form-actions split-actions">
+              <button class="button button-ghost previous-step" type="button" data-previous="2" data-i18n="backButton">Back</button>
+              <button class="button button-primary" type="submit" data-i18n="analyzeButton">Analyze churn risk</button>
+            </div>
+          </section>
+        </form>
+
+        <!-- Compact prediction result card. -->
+        <aside id="resultCard" class="result-card" aria-live="polite">
+          <div class="result-head">
+            <span class="mini-label" data-i18n="resultLabel">RISK ASSESSMENT</span>
+            <span id="resultStatus" class="result-status neutral" data-i18n="resultReady">Ready</span>
+          </div>
+
+          <div id="resultEmpty" class="result-empty">
+            <div class="result-symbol">↗</div>
+            <h3 data-i18n="resultEmptyTitle">Ready to analyze</h3>
+            <p data-i18n="resultEmptyText">Complete the three steps to generate a customer churn risk score.</p>
+          </div>
+
+          <div id="resultContent" class="result-content hidden">
+            <span id="riskLabel" class="risk-label">Higher churn risk</span>
+
+            <div class="score-row">
+              <strong id="probabilityValue">0.0%</strong>
+              <span data-i18n="scoreCaption">churn risk</span>
+            </div>
+
+            <div class="risk-track" aria-hidden="true">
+              <span id="probabilityBar"></span>
+            </div>
+
+            <p id="resultDescription" class="result-description"></p>
+
+            <button id="resetAnalysis" class="text-button" type="button" data-i18n="analyzeAnother">Analyze another customer</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Product-focused explanation of the workflow. -->
+    <section id="how" class="section soft-section">
+      <div class="page-width">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow" data-i18n="howEyebrow">HOW CHURNSENSE WORKS</span>
+            <h2 data-i18n="howTitle">A simple path from customer data to retention insight.</h2>
+          </div>
+        </div>
+
+        <div class="workflow-grid">
+          <article class="workflow-card">
+            <span>01</span>
+            <h3 data-i18n="workflowOneTitle">Customer data</h3>
+            <p data-i18n="workflowOneText">Account, service, and billing information is prepared for analysis.</p>
+          </article>
+
+          <article class="workflow-card">
+            <span>02</span>
+            <h3 data-i18n="workflowTwoTitle">Risk analysis</h3>
+            <p data-i18n="workflowTwoText">The system evaluates the customer using the prediction model.</p>
+          </article>
+
+          <article class="workflow-card">
+            <span>03</span>
+            <h3 data-i18n="workflowThreeTitle">Churn score</h3>
+            <p data-i18n="workflowThreeText">A churn risk score is returned in a clear, decision-friendly format.</p>
+          </article>
+
+          <article class="workflow-card">
+            <span>04</span>
+            <h3 data-i18n="workflowFourTitle">Retention support</h3>
+            <p data-i18n="workflowFourText">Teams can use the result to prioritize earlier retention follow-up.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Compact technical performance section. -->
+    <section id="performance" class="section page-width">
+      <div class="section-heading performance-heading">
+        <div>
+          <span class="eyebrow" data-i18n="performanceEyebrow">PREDICTION PERFORMANCE</span>
+          <h2 data-i18n="performanceTitle">A focused view of model quality.</h2>
+          <p class="section-copy" data-i18n="performanceText">Evaluation results from the held-out test set.</p>
+        </div>
+      </div>
+
+      <div class="metric-grid">
+        <article class="metric-card">
+          <span data-i18n="accuracyLabel">Accuracy</span>
+          <strong>79.6%</strong>
+        </article>
+
+        <article class="metric-card">
+          <span data-i18n="recallLabel">Recall</span>
+          <strong>65.8%</strong>
+        </article>
+
+        <article class="metric-card">
+          <span data-i18n="precisionLabel">Precision</span>
+          <strong>60.7%</strong>
+        </article>
+
+        <article class="metric-card">
+          <span data-i18n="f1Label">F1 score</span>
+          <strong>63.2%</strong>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- Minimal product-style footer. -->
+  <footer class="site-footer">
+    <div class="page-width footer-inner">
+      <div>
+        <strong>ChurnSense</strong>
+        <span data-i18n="footerTagline">Customer retention intelligence.</span>
+      </div>
+      <span>© 2026 ChurnSense</span>
+    </div>
+  </footer>
+
+  <!-- Load website interaction code after the page content. -->
+  <script src="script.js"></script>
+</body>
+</html>
