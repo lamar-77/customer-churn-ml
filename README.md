@@ -1,217 +1,824 @@
-# Customer Churn Prediction
-This project aims to predict whether a customer will churn or stay, so the company can take action to reduce customer churn
+# ChurnSense
+
+**ChurnSense** is an end-to-end machine learning application for customer churn risk analysis.
+
+It combines a trained machine learning model with a Flask backend, a bilingual user interface, authentication, role-based access control, a shared Supabase database, prediction history, and an interactive risk simulator.
+
+> **Current version:** Local Flask application connected to a shared online Supabase database.
+
+---
+
+## About the Project
+
+Customer churn is an important business problem for subscription-based companies. Identifying customers who are more likely to leave can help retention teams take action earlier.
+
+ChurnSense analyzes customer account, service, and billing information and estimates the probability that a customer may churn.
+
+The project covers the complete machine learning workflow:
+
+**Data Preparation → Model Training → Evaluation → Threshold Tuning → API Integration → Web Application → Authentication → Shared Database**
+
+---
+
+## Main Features
+
+- Customer churn probability prediction
+- Real trained machine learning model
+- English and Arabic interface
+- RTL support for Arabic
+- Multi-step customer analysis form
+- Flask backend API
+- Shared Supabase database
+- Supabase Authentication
+- Email-based user registration
+- Login and logout system
+- Role-Based Access Control (RBAC)
+- Admin user management
+- Customer prediction history
+- Dashboard statistics
+- Customer risk simulator
+- User profile and settings
+- Responsive web interface
+- Local machine learning inference
+
+---
+
+## User Roles
+
+ChurnSense uses a Role-Based Access Control system.
+
+Every new account is created with the **User** role by default. Higher-level roles can only be assigned by an administrator.
+
+| Role | Access |
+| --- | --- |
+| **User** | Overview, customer analysis, profile, and settings |
+| **Analyst** | User access + customer records, analytics, and Risk Simulator |
+| **Manager** | Extended access to customer records and analytics |
+| **Admin** | Full access + user management and role assignment |
+
+Users cannot assign themselves privileged roles such as Admin or Manager.
+
+---
+
+# Machine Learning
+
 ## Dataset
-Our dataset is the [Telco Customer Churn dataset](https://github.com/IBM/telco-customer-churn-on-icp4d) from IBM.
 
-We aim to predict whether a customer will churn or stay.
-Our target variable is `Churn`, which has two classes: `Yes` and `No`.
-## Data Exploration and Cleaning
-- We explored the dataset and discovered that `TotalCharges` was stored as a string, but it should be a numeric value.
-- We converted `TotalCharges` from string to numeric.
-- We found 11 missing values and removed those rows.
-- Finally, after cleaning, we have 7,032 customers.
-## Feature Selection and Data Splitting
-- We separated the features (X) from the target (y).
-- We removed `customerID` because it is only an identifier.
-- We split the data into 80% training and 20% testing.
-- We used stratified splitting to keep the same Churn distribution in both sets
-### Data Preprocessing
+The model was developed using the **IBM Telco Customer Churn** dataset.
 
-- Split the dataset into training and testing sets (80/20).
-- Used stratified splitting to keep the churn distribution similar in both sets.
-- Identified numerical and categorical features.
-- Applied One-Hot Encoding to categorical features.
-- Fitted the encoder only on the training data to avoid data leakage.
-- Used the same encoder to transform the test data.
-- Combined numerical and encoded features.
-- Final training data shape: 5625 × 45.
-- Final test data shape: 1407 × 45.
-### Model Training
+The dataset contains customer information such as:
+
+- Customer tenure
+- Contract type
+- Internet service
+- Online security
+- Technical support
+- Payment method
+- Monthly charges
+- Total charges
+- Streaming services
+- Partner and dependent information
+- Churn status
+
+---
+
+## Data Preparation
+
+The original dataset contained:
+
+**7,043 customers**
+
+After cleaning:
+
+**7,032 customers**
+
+Main preprocessing steps:
+
+- Converted `TotalCharges` from text to numeric
+- Removed rows with missing `TotalCharges`
+- Removed `customerID` from model features
+- Separated features from the target variable
+- Used a stratified 80/20 train-test split
+- Identified categorical and numerical features
+- Applied One-Hot Encoding to categorical features
+- Fitted the encoder only on training data to avoid data leakage
+- Used the same fitted encoder for test and application data
+- Preserved the exact feature order used during training
+
+Final model input:
+
+**45 features**
+
+---
+
+## Models Compared
 
 Three classification models were trained and evaluated:
 
-- Logistic Regression
-- Random Forest
-- Gradient Boosting
+1. Logistic Regression
+2. Random Forest
+3. Gradient Boosting
 
-The models were trained using the prepared training data and evaluated using the test data.
+### Initial Results
 
-### Logistic Regression
+| Model | Accuracy | Recall | Precision | F1 Score |
+| --- | ---: | ---: | ---: | ---: |
+| Logistic Regression | 81.66% | 56.68% | 68.83% | 62.17% |
+| Random Forest | 79.67% | 52.67% | 64.38% | 58.68% |
+| Gradient Boosting | 81.17% | 56.15% | 67.52% | 61.31% |
 
-Logistic Regression was used as the baseline model.
+Logistic Regression produced the strongest overall result in this experiment and was selected as the final model.
 
-Initial results:
+---
 
-- Accuracy: 81.66%
-- Recall: 56.68%
-- Precision: 68.83%
-- F1-score: 62.17%
+## Cross-Validation
 
-Confusion Matrix:
+5-fold cross-validation was performed on the training data.
 
-- True Negatives: 937
-- False Positives: 96
-- False Negatives: 162
-- True Positives: 212
+The evaluation focused on:
 
-### Random Forest
+- Recall
+- F1 Score
 
-Random Forest was trained to compare its performance with Logistic Regression.
+Average cross-validation results:
 
-Results:
+| Metric | Result |
+| --- | ---: |
+| Recall | 53.78% |
+| F1 Score | 58.80% |
 
-- Accuracy: 79.67%
-- Recall: 52.67%
-- Precision: 64.38%
-- F1-score: 58.68%
+Cross-validation was used to evaluate whether model performance remained reasonably consistent across different parts of the training data.
 
-Confusion Matrix:
+---
 
-- True Negatives: 935
-- False Positives: 98
-- False Negatives: 178
-- True Positives: 196
+# Threshold Tuning
 
-### Gradient Boosting
+The default classification threshold for binary classification is typically:
 
-Gradient Boosting was also trained and evaluated.
+```text
+0.50
+```
 
-Results:
+However, in customer churn prediction, missing an actual churn customer can be more important than incorrectly flagging a customer who may stay.
 
-- Accuracy: 81.17%
-- Recall: 56.15%
-- Precision: 67.52%
-- F1-score: 61.31%
+For this reason, different thresholds were evaluated.
 
-Confusion Matrix:
+| Threshold | Accuracy | Recall | Precision | F1 Score | False Negatives |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 0.50 | 81.66% | 56.68% | 68.83% | 62.17% | 162 |
+| 0.45 | 81.02% | 61.50% | 65.16% | 63.27% | 144 |
+| 0.40 | 79.60% | 65.78% | 60.74% | 63.16% | 128 |
 
-- True Negatives: 932
-- False Positives: 101
-- False Negatives: 164
-- True Positives: 210
+The final threshold was selected as:
 
-### Model Comparison
+```text
+0.40
+```
 
-Logistic Regression performed better overall than Random Forest and Gradient Boosting.
+This decision prioritizes **Recall** and reduces the number of missed churn customers.
 
-It achieved:
+Lowering the threshold from `0.50` to `0.40` reduced false negatives from:
 
-- Higher Accuracy
-- Higher Recall
-- Higher Precision
-- Higher F1-score
-- Fewer False Negatives
+```text
+162 → 128
+```
 
-Because the main goal of this project is to identify customers who are likely to churn, Recall was considered an important metric.
+while accepting an increase in false positives.
 
-### Cross-Validation
+---
 
-5-fold cross-validation was performed on the Logistic Regression model using the training data.
+# Final Model Performance
 
-Recall scores:
+The final model is:
 
-- 53.85%
-- 52.17%
-- 57.19%
-- 57.19%
-- 48.49%
+**Logistic Regression with a 0.40 decision threshold**
 
-Average Recall:
+Final test results:
 
-- 53.78%
+| Metric | Result |
+| --- | ---: |
+| Accuracy | 79.60% |
+| Recall | 65.78% |
+| Precision | 60.74% |
+| F1 Score | 63.16% |
 
-Average F1-score:
+Final confusion matrix:
 
-- 58.80%
+```text
+True Negatives  = 874
+False Positives = 159
+False Negatives = 128
+True Positives  = 246
+```
 
-The results showed that the model performance was relatively consistent across different training splits.
+---
 
-### Threshold Tuning
+# Model Visualizations
 
-The default classification threshold of 0.50 was compared with 0.45 and 0.40.
-
-Lowering the threshold makes the model more likely to predict Churn = Yes.
-
-Threshold comparison:
-
-#### Threshold = 0.50
-
-- Accuracy: 81.66%
-- Recall: 56.68%
-- Precision: 68.83%
-- F1-score: 62.17%
-- False Negatives: 162
-- False Positives: 96
-
-#### Threshold = 0.45
-
-- Accuracy: 81.02%
-- Recall: 61.50%
-- Precision: 65.16%
-- F1-score: 63.27%
-- False Negatives: 144
-- False Positives: 123
-
-#### Threshold = 0.40
-
-- Accuracy: 79.60%
-- Recall: 65.78%
-- Precision: 60.74%
-- F1-score: 63.16%
-- False Negatives: 128
-- False Positives: 159
-
-A threshold of 0.40 was selected because the project prioritizes Recall and reducing False Negatives.
-
-### Final Model
-
-Final model:
-
-- Logistic Regression
-- Classification threshold: 0.40
-
-Final performance:
-
-- Accuracy: 79.60%
-- Recall: 65.78%
-- Precision: 60.74%
-- F1-score: 63.16%
-- False Negatives: 128
-- False Positives: 159
-- True Positives: 246
-- True Negatives: 874
-
-Lowering the threshold improved Recall from 56.68% to 65.78% and reduced False Negatives from 162 to 128.
-
-### Visualizations
-
-#### Model Performance
+## Performance Metrics
 
 ![Model Performance](images/metrics_bar_chart.png)
 
-#### Confusion Matrix
-
-![Confusion Matrix](images/confusion_matrix.png)
-
-#### Threshold Comparison
+## Threshold Comparison
 
 ![Threshold Comparison](images/threshold_comparison.png)
 
-### Key Findings
+## Confusion Matrix
 
-- Logistic Regression performed better overall than Random Forest and Gradient Boosting.
-- Accuracy alone was not enough to evaluate the model.
-- Recall was important because missing churn customers can reduce the effectiveness of customer retention actions.
-- Lowering the classification threshold increased Recall.
-- A threshold of 0.40 reduced the number of missed churn customers.
-- Increasing Recall also increased False Positives, showing the trade-off between Recall and Precision.
+![Confusion Matrix](images/confusion_matrix.png)
 
-### Future Improvements
+---
 
-- Connect the trained model to the project website.
-- Deploy the model through an API.
-- Test class balancing techniques.
-- Tune model hyperparameters.
-- Test additional machine learning models.
-- Perform feature importance analysis.
-- Improve Recall while maintaining acceptable Precision.
+# How ChurnSense Works
+
+The application follows this flow:
+
+```text
+Customer Information
+        ↓
+Flask Backend
+        ↓
+Saved One-Hot Encoder
+        ↓
+45 Model Features
+        ↓
+Logistic Regression Model
+        ↓
+Churn Probability
+        ↓
+Threshold = 0.40
+        ↓
+Risk Prediction
+        ↓
+Result Displayed to User
+```
+
+The frontend sends the customer information to the Flask backend.
+
+The backend then:
+
+1. Validates the required customer fields
+2. Converts numerical inputs to the correct data types
+3. Uses the saved fitted encoder for categorical features
+4. Recreates the exact 45-feature structure used during training
+5. Loads the trained Logistic Regression model
+6. Calculates the churn probability using `predict_proba()`
+7. Applies the final `0.40` threshold
+8. Returns the prediction to the frontend
+
+---
+
+# Application Architecture
+
+```text
+                 ┌──────────────────────┐
+                 │      ChurnSense      │
+                 │       Frontend       │
+                 │ HTML / CSS / JS      │
+                 └──────────┬───────────┘
+                            │
+                            ▼
+                 ┌──────────────────────┐
+                 │    Flask Backend     │
+                 │       Python         │
+                 └───────┬──────┬───────┘
+                         │      │
+              ┌──────────┘      └──────────┐
+              ▼                            ▼
+     ┌─────────────────┐         ┌─────────────────┐
+     │ Machine Learning│         │    Supabase     │
+     │      Model      │         │                 │
+     │                 │         │ Authentication  │
+     │ Logistic        │         │ PostgreSQL      │
+     │ Regression      │         │ User Roles      │
+     └────────┬────────┘         │ Predictions     │
+              │                  │ Settings        │
+              ▼                  └─────────────────┘
+     Churn Probability
+              │
+              ▼
+        Risk Prediction
+```
+
+---
+
+# Shared Database
+
+ChurnSense uses **Supabase PostgreSQL** as a shared online database.
+
+This means different users can use ChurnSense from different devices while their accounts and application records are stored in the same database.
+
+The shared database stores:
+
+- User profiles
+- User roles
+- User settings
+- Prediction history
+- Customer references
+- Prediction probabilities
+- Prediction results
+
+Passwords are **not stored manually by ChurnSense**.
+
+Authentication and password management are handled by **Supabase Authentication**.
+
+---
+
+# Authentication
+
+ChurnSense includes:
+
+- Account registration
+- Email authentication
+- Login
+- Logout
+- User sessions
+- User profile information
+
+Supabase Authentication manages user identity and passwords.
+
+---
+
+# Role-Based Access Control
+
+The application uses RBAC to control what each user can access.
+
+For example:
+
+```text
+User
+├── Overview
+├── Analyze Customer
+├── Profile
+└── Settings
+```
+
+```text
+Analyst
+├── User Features
+├── Customer Records
+├── Analytics
+└── Risk Simulator
+```
+
+```text
+Manager
+├── Customer Records
+├── Analytics
+└── Extended Business Access
+```
+
+```text
+Admin
+├── Full Application Access
+├── User Management
+└── Role Assignment
+```
+
+Admin permissions are protected in both the frontend and backend.
+
+Hiding an Admin button is not considered sufficient security. Backend authorization checks are also used to prevent unauthorized access.
+
+---
+
+# Admin User Management
+
+Administrators can:
+
+- View registered users
+- View user email addresses
+- View current roles
+- Change user roles
+- Assign Analyst roles
+- Assign Manager roles
+- Assign Admin roles
+
+New users receive the following role automatically:
+
+```text
+user
+```
+
+Users cannot select privileged roles during registration.
+
+---
+
+# Risk Simulator
+
+ChurnSense includes an interactive **Risk Simulator**.
+
+The simulator allows selected customer information to be modified and sends the updated data through the same trained model again.
+
+Example:
+
+```text
+Current prediction:
+Churn Risk = 68%
+
+Simulated customer:
+Contract: Month-to-month → One year
+
+New prediction:
+Churn Risk = 49%
+```
+
+The simulator is intended for scenario exploration.
+
+> The Risk Simulator provides a predictive comparison, not a causal conclusion. A change in predicted churn probability does not prove that changing one customer feature will directly cause churn risk to change.
+
+---
+
+# Bilingual Interface
+
+ChurnSense supports:
+
+- English
+- Arabic
+
+The Arabic interface also supports:
+
+```text
+RTL — Right-to-Left layout
+```
+
+The language can be changed from the application interface.
+
+---
+
+# Tech Stack
+
+## Machine Learning
+
+- Python
+- pandas
+- NumPy
+- scikit-learn
+- Matplotlib
+- Jupyter Notebook
+- joblib
+
+## Backend
+
+- Flask
+- Python
+- python-dotenv
+- Supabase Python client
+
+## Frontend
+
+- HTML
+- CSS
+- JavaScript
+
+## Database
+
+- Supabase PostgreSQL
+
+## Authentication
+
+- Supabase Authentication
+
+## Security
+
+- Row Level Security (RLS)
+- Role-Based Access Control
+- Environment variables
+- Backend authorization checks
+
+## Development Tools
+
+- Visual Studio Code
+- Git
+- GitHub
+
+---
+
+# Project Structure
+
+```text
+customer-churn-ml/
+│
+├── api/
+│   ├── __init__.py
+│   └── app.py
+│
+├── models/
+│   ├── churn_model.pkl
+│   ├── encoder.pkl
+│   └── model_config.pkl
+│
+├── website/
+│   ├── index.html
+│   ├── login.html
+│   ├── dashboard.html
+│   ├── style.css
+│   ├── script.js
+│   ├── login.js
+│   └── dashboard.js
+│
+├── supabase/
+│   ├── 01_setup.sql
+│   └── 02_make_first_admin.sql
+│
+├── images/
+│   ├── metrics_bar_chart.png
+│   ├── threshold_comparison.png
+│   └── confusion_matrix.png
+│
+├── database/
+│   └── .gitkeep
+│
+├── churn_analysis.ipynb
+├── requirements.txt
+├── .env.example
+├── .gitignore
+├── Procfile
+└── README.md
+```
+
+---
+
+# Installation
+
+## 1. Clone the Repository
+
+```bash
+git clone https://github.com/lamar-77/customer-churn-ml.git
+```
+
+Move into the project:
+
+```bash
+cd customer-churn-ml
+```
+
+---
+
+## 2. Create a Virtual Environment
+
+```bash
+python -m venv .venv
+```
+
+### Windows
+
+Activate it using:
+
+```bash
+.venv\Scripts\activate
+```
+
+---
+
+## 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+# Supabase Setup
+
+Create a Supabase project.
+
+Then open the Supabase SQL Editor and run:
+
+```text
+supabase/01_setup.sql
+```
+
+This creates the database structure, security policies, role system, and required functions for ChurnSense.
+
+---
+
+# Environment Variables
+
+Copy:
+
+```text
+.env.example
+```
+
+and create:
+
+```text
+.env
+```
+
+Add your Supabase values:
+
+```env
+SUPABASE_URL=https://YOUR_PROJECT_REF.supabase.co
+SUPABASE_PUBLISHABLE_KEY=YOUR_PUBLISHABLE_KEY
+CHURNSENSE_SECRET_KEY=
+CHURNSENSE_DEBUG=1
+```
+
+Never commit `.env` to GitHub.
+
+The repository only includes:
+
+```text
+.env.example
+```
+
+which contains placeholders and no private project credentials.
+
+---
+
+# Authentication URL Configuration
+
+For local development, configure the Supabase Authentication Site URL as:
+
+```text
+http://127.0.0.1:5000
+```
+
+A local redirect URL can also be added for development.
+
+---
+
+# Run the Application
+
+Start ChurnSense using:
+
+```bash
+python api/app.py
+```
+
+Then open:
+
+```text
+http://127.0.0.1:5000
+```
+
+---
+
+# Create the First Admin
+
+After registering the first account, open:
+
+```text
+supabase/02_make_first_admin.sql
+```
+
+Replace the email placeholder with the account email.
+
+Run the query inside Supabase SQL Editor.
+
+Then:
+
+```text
+Logout
+↓
+Login again
+↓
+Admin role becomes active
+```
+
+---
+
+# Security
+
+ChurnSense includes several security measures:
+
+- Passwords are handled by Supabase Authentication
+- Passwords are not stored manually in the application database
+- New users cannot assign themselves privileged roles
+- Admin-only operations require authorization
+- Row Level Security protects database records
+- The `.env` file is excluded from Git
+- Sensitive configuration values are stored through environment variables
+- Secret and service-role keys are not included in the client application
+- The application uses the Supabase Publishable Key rather than a secret database key
+
+---
+
+# Git Ignore
+
+The project excludes local and sensitive files such as:
+
+```gitignore
+.venv/
+.ipynb_checkpoints/
+data/
+.env
+__pycache__/
+*.pyc
+database/*.db
+```
+
+This prevents local datasets, virtual environments, secrets, and temporary files from being uploaded to GitHub.
+
+---
+
+# Current Project Status
+
+### Machine Learning
+
+- Data cleaning ✅
+- Exploratory analysis ✅
+- Feature preparation ✅
+- Logistic Regression ✅
+- Random Forest ✅
+- Gradient Boosting ✅
+- Model comparison ✅
+- Cross-validation ✅
+- Threshold tuning ✅
+- Model serialization ✅
+
+### Application
+
+- Flask backend ✅
+- Prediction API ✅
+- Bilingual frontend ✅
+- Responsive design ✅
+- Customer analysis form ✅
+- Risk result interface ✅
+- Risk Simulator ✅
+
+### Accounts and Database
+
+- Supabase integration ✅
+- Shared PostgreSQL database ✅
+- User registration ✅
+- Login / Logout ✅
+- User roles ✅
+- Admin management ✅
+- Prediction history ✅
+- User settings ✅
+
+### Current Development Note
+
+Email confirmation redirect handling for the local application is still being refined.
+
+---
+
+# Future Improvements
+
+Possible future improvements include:
+
+- Improve email confirmation redirect handling
+- Package ChurnSense as a simple Windows application
+- Add richer customer-level model explanations
+- Add additional analytics visualizations
+- Add automated backend tests
+- Add automated frontend tests
+- Improve accessibility
+- Add production deployment if needed
+- Explore additional models and hyperparameter tuning
+
+---
+
+# Project Goal
+
+The goal of ChurnSense is not only to train a machine learning model, but to demonstrate how a model can be integrated into a usable application.
+
+The project combines:
+
+```text
+Machine Learning
+       +
+Backend Development
+       +
+Frontend Development
+       +
+Authentication
+       +
+Database Integration
+       +
+User Experience
+```
+
+into one end-to-end application.
+
+---
+
+# Author
+
+**Lamar Almutairi**
+
+Computer Science Graduate  
+Princess Nourah bint Abdulrahman University
+
+Interested in:
+
+- Artificial Intelligence
+- Machine Learning
+- Applied AI Systems
+- Data-driven applications
+
+---
+
+## Repository
+
+**GitHub:** `lamar-77/customer-churn-ml`
+
+---
+
+## Disclaimer
+
+ChurnSense is an educational machine learning project.
+
+Predictions are generated from patterns learned from the training dataset and should not be interpreted as guaranteed future customer behavior or causal business conclusions.
