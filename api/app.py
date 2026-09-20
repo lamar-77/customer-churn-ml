@@ -385,7 +385,10 @@ def register():
             {
                 "email": email,
                 "password": password,
-                "options": {"data": {"name": name}},
+                "options": {
+                    "data": {"name": name},
+                    "email_redirect_to": "http://127.0.0.1:5000/login?confirmed=1",
+                    },
             }
         )
 
