@@ -5,3 +5,4 @@ pandas>=2.2,<4
 scikit-learn>=1.6,<2
 python-dotenv>=1.0,<2
 supabase>=2.20,<3
+gunicorn
