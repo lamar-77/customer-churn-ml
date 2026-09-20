@@ -2,7 +2,15 @@
 
 ChurnSense is a machine learning project that predicts whether a telecom customer is likely to churn.
 
-The project started as a customer churn classification model and was later connected to a simple web application where users can enter customer information and receive a churn risk prediction.
+The project started as a customer churn classification model and was later connected to a web application where users can enter customer information and receive a churn risk prediction.
+
+## Live Demo
+
+ChurnSense is deployed on Render and can be accessed here:
+
+https://churnsense-1251.onrender.com
+
+> The free Render service may take a short time to start if the application has been inactive.
 
 ## Project Idea
 
@@ -39,7 +47,7 @@ The main preprocessing steps were:
 - Split the data into training and testing sets using an 80/20 split
 - Used stratified splitting to keep the churn distribution similar
 - Applied One-Hot Encoding to categorical features
-- Fitted the encoder only on the training data to avoid data leakage
+- Fitted the encoder only on the training data
 - Used the same encoder for the test data
 
 The final model input contains 45 features.
@@ -73,7 +81,7 @@ Average results:
 
 ## Threshold Tuning
 
-The default threshold was 0.50.
+The default classification threshold is usually 0.50.
 
 Because Recall is important in churn prediction, I tested lower thresholds to reduce the number of customers who actually churn but are predicted as non-churn.
 
@@ -126,15 +134,15 @@ The user can enter customer information through the website, and the application
 3. Uses the saved Logistic Regression model
 4. Calculates the churn probability
 5. Applies the 0.40 threshold
-6. Displays the result to the user
+6. Displays the prediction result
 
 The website supports both English and Arabic.
 
 ## User Accounts
 
-ChurnSense also includes a simple account system using Supabase.
+ChurnSense includes a simple account system using Supabase.
 
-The application currently supports:
+The application supports:
 
 - Register
 - Login and logout
@@ -155,11 +163,11 @@ New users are created as regular users, while the Admin can change user roles.
 
 ## Risk Simulator
 
-The project also includes a simple Risk Simulator.
+The project also includes a Risk Simulator.
 
 It allows the user to change some customer information and run the model again to compare the new churn probability with the original prediction.
 
-The simulator is only used for prediction comparison and does not prove that changing one feature directly causes churn to increase or decrease.
+The simulator is used for prediction comparison only. It does not prove that changing one feature directly causes churn risk to increase or decrease.
 
 ## Technologies Used
 
@@ -170,10 +178,12 @@ The simulator is only used for prediction comparison and does not prove that cha
 - Matplotlib
 - Jupyter Notebook
 - Flask
+- Gunicorn
 - HTML
 - CSS
 - JavaScript
 - Supabase
+- Render
 - Git
 - GitHub
 - VS Code
@@ -236,19 +246,56 @@ Open:
 http://127.0.0.1:5000
 ```
 
+## Deployment
+
+The application is deployed on Render.
+
+The deployed version uses:
+
+- Render for hosting the Flask application
+- Supabase for authentication and the shared database
+- Gunicorn to run the Flask application
+
+Environment variables are added directly in Render instead of being stored in the GitHub repository.
+
+## Current Status
+
+The main project is complete and working.
+
+Completed parts:
+
+- Data cleaning
+- Machine learning model training
+- Model comparison
+- Cross-validation
+- Threshold tuning
+- Flask integration
+- Web interface
+- Arabic and English support
+- Supabase integration
+- Authentication
+- User roles
+- Admin management
+- Prediction history
+- Risk Simulator
+- Online deployment
+
 ## Future Improvements
 
 Some improvements I may add later:
 
-- Improve the email confirmation redirect
+- Improve email confirmation flow
 - Improve the analytics section
 - Add more model explanations
-- Package the project as an easier local application
+- Improve the mobile experience
 - Test more machine learning models
+- Add more automated testing
 
 ## Author
 
 **Lamar Almutairi**
 
 Computer Science Graduate  
-Interested in Artificial Intelligence and Machine Learning
+Princess Nourah bint Abdulrahman University
+
+Interested in Artificial Intelligence, Machine Learning, and Data.
