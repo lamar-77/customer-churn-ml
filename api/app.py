@@ -55,7 +55,7 @@ app.secret_key = os.environ.get("CHURNSENSE_SECRET_KEY") or secrets.token_hex(32
 app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE="Lax",
-    SESSION_COOKIE_SECURE=False,
+    SESSION_COOKIE_SECURE=True,
 )
 
 
@@ -387,7 +387,7 @@ def register():
                 "password": password,
                 "options": {
                     "data": {"name": name},
-                    "email_redirect_to": "http://127.0.0.1:5000/login?confirmed=1",
+                    "email_redirect_to": "https://churnsense-1251.onrender.com/login?confirmed=1",
                     },
             }
         )
