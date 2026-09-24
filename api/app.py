@@ -127,7 +127,6 @@ def save_auth_session(auth_response):
     auth_session = getattr(auth_response, "session", None)
     auth_user = getattr(auth_response, "user", None)
 
-    # Email confirmation can make sign-up return a user without an active session.
     if auth_session is None or auth_user is None:
         return False
 
@@ -138,7 +137,7 @@ def save_auth_session(auth_response):
     return True
 
 
-# Clear only authentication values from the local session.
+# Clear authentication values from the local session.
 def clear_auth_session():
     session.pop("sb_access_token", None)
     session.pop("sb_refresh_token", None)
@@ -213,6 +212,7 @@ def current_user_record():
             .limit(1)
             .execute()
         )
+        # ternary expression
         profile = response.data[0] if response.data else None
 
         # Cache the profile for the rest of this request.
@@ -246,7 +246,7 @@ def has_permission(permission):
     return permission in ROLE_PERMISSIONS.get(user["role"], set())
 
 
-# Reusable API guard for endpoints that require a logged-in account.
+# Reusable API guard for endpoints that require a logged-in account (Decorator)
 def login_required(function):
     @wraps(function)
     def wrapped(*args, **kwargs):
@@ -387,7 +387,7 @@ def register():
                 "password": password,
                 "options": {
                     "data": {"name": name},
-                    "email_redirect_to": "https://churnsense-1251.onrender.com/login?confirmed=1",
+                    "email_redirect_to": "https://churnsense-125l.onrender.com/login?confirmed=1",
                     },
             }
         )
