@@ -1,11 +1,6 @@
--- ChurnSense shared database setup for Supabase PostgreSQL.
--- Run this whole file once in Supabase Dashboard -> SQL Editor.
 
--- ============================================================
 -- 1) SHARED TABLES
--- ============================================================
 
--- Store application profile fields and the RBAC role.
 create table if not exists public.profiles (
     id uuid primary key references auth.users(id) on delete cascade,
     name text not null default '',
@@ -41,9 +36,7 @@ create index if not exists idx_predictions_user_created
 on public.predictions (user_id, created_at desc);
 
 
--- ============================================================
 -- 2) AUTOMATIC PROFILE CREATION AFTER SIGN-UP
--- ============================================================
 
 -- Create the ChurnSense profile and default settings whenever Supabase Auth creates a user.
 create or replace function public.handle_new_auth_user()
@@ -70,16 +63,13 @@ begin
 end;
 $$;
 
--- Recreate the trigger safely if this setup file is run again.
 drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
 after insert on auth.users
 for each row execute procedure public.handle_new_auth_user();
 
 
--- ============================================================
 -- 3) ROW LEVEL SECURITY (RLS)
--- ============================================================
 
 -- Turn RLS on for every table exposed through the Data API.
 alter table public.profiles enable row level security;
@@ -136,9 +126,7 @@ to authenticated
 with check (user_id = auth.uid());
 
 
--- ============================================================
 -- 4) SAFE PROFILE UPDATE FUNCTION
--- ============================================================
 
 -- Update only editable profile fields; the caller cannot change their own role here.
 create or replace function public.update_my_profile(
@@ -166,9 +154,7 @@ end;
 $$;
 
 
--- ============================================================
 -- 5) ROLE / ADMIN HELPERS
--- ============================================================
 
 -- Check the live shared role of the signed-in account.
 create or replace function public.is_admin()
@@ -300,9 +286,7 @@ end;
 $$;
 
 
--- ============================================================
 -- 6) DATA API PRIVILEGES
--- ============================================================
 
 -- Remove anonymous table access.
 revoke all on table public.profiles from anon;

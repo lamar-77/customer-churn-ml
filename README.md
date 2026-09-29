@@ -8,7 +8,7 @@ The project started as a customer churn classification model and was later conne
 
 ChurnSense is deployed on Render and can be accessed here:
 
-https://churnsense-1251.onrender.com
+https://churnsense-125l.onrender.com
 
 > The free Render service may take a short time to start if the application has been inactive.
 
@@ -63,7 +63,6 @@ I trained and compared three models:
 ### Initial Results
 
 | Model | Accuracy | Recall | Precision | F1 |
-| --- | ---: | ---: | ---: | ---: |
 | Logistic Regression | 81.66% | 56.68% | 68.83% | 62.17% |
 | Random Forest | 79.67% | 52.67% | 64.38% | 58.68% |
 | Gradient Boosting | 81.17% | 56.15% | 67.52% | 61.31% |
@@ -86,7 +85,6 @@ The default classification threshold is usually 0.50.
 Because Recall is important in churn prediction, I tested lower thresholds to reduce the number of customers who actually churn but are predicted as non-churn.
 
 | Threshold | Recall | Precision | F1 | False Negatives |
-| --- | ---: | ---: | ---: | ---: |
 | 0.50 | 56.68% | 68.83% | 62.17% | 162 |
 | 0.45 | 61.50% | 65.16% | 63.27% | 144 |
 | 0.40 | 65.78% | 60.74% | 63.16% | 128 |
@@ -159,7 +157,7 @@ The available roles are:
 - Manager
 - Admin
 
-New users are created as regular users, while the Admin can change user roles.
+New users are created as regular users, while the Admin can change user roles, and he can not change his role it self.
 
 ## Risk Simulator
 
@@ -204,7 +202,6 @@ customer-churn-ml/
 ├── .gitignore
 └── README.md
 ```
-
 ## Run the Project Locally
 
 Clone the repository:
@@ -232,7 +229,15 @@ Install the required packages:
 pip install -r requirements.txt
 ```
 
-Create a `.env` file using `.env.example` and add your Supabase project information.
+Create a `.env` file based on `.env.example` and add your Supabase project information.
+
+In Supabase, open the SQL Editor and run:
+
+```text
+supabase/01_setup.sql
+```
+
+Run this setup file once to create the required tables, Row Level Security policies, triggers, and database functions.
 
 Then run:
 
@@ -245,6 +250,7 @@ Open:
 ```text
 http://127.0.0.1:5000
 ```
+
 
 ## Deployment
 
@@ -280,22 +286,10 @@ Completed parts:
 - Risk Simulator
 - Online deployment
 
-## Future Improvements
-
-Some improvements I may add later:
-
-- Improve email confirmation flow
-- Improve the analytics section
-- Add more model explanations
-- Improve the mobile experience
-- Test more machine learning models
-- Add more automated testing
 
 ## Author
 
 **Lamar Almutairi**
 
-Computer Science Graduate  
-Princess Nourah bint Abdulrahman University
 
-Interested in Artificial Intelligence, Machine Learning, and Data.
+
